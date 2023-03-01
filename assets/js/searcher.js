@@ -5,15 +5,17 @@ loadProducts = () => {
     let URLXml = "https://raw.githubusercontent.com/Bootcamp-Espol/FSD02/main/S03D03/clase/recursos/products.xml"
     let templateProductoJson = "";
     let templateProductoXml = "";
-    let hayFiltro = new Boolean(document.getElementById("text").innerHTML);
+    let filtro = document.getElementById("text").value;
+    let hayFiltro = Boolean(filtro);
+    document.getElementById("productos").innerHTML = "";
 
     let requestJson = async (miUrlJson) => {
       try {
         let responseJson = await fetch(miUrlJson);
         let resultJson = await responseJson.json();
 
-        if (hayFiltro === true) {
-
+        if (hayFiltro) {
+          resultJson = resultJson.filter((el) => (el.name.includes(filtro.toLowerCase()) || el.type.includes(filtro.toLowerCase())));
         }
 
         resultJson.forEach(elemento => {
@@ -55,17 +57,16 @@ loadProducts = () => {
         let xml = (new DOMParser()).parseFromString(resultXml, 'application/xml');
         let arrProducto = xml.getElementsByTagName("product");
 
-        if (hayFiltro === true) {
-
-        }
-
         for (let elemento of arrProducto) {
           let name = elemento.getElementsByTagName("name")[0].innerHTML;
           let price = elemento.getElementsByTagName("price")[0].innerHTML;
           let src = elemento.getElementsByTagName("src")[0].innerHTML;
           let type = elemento.getElementsByTagName("type")[0].innerHTML;
 
-          templateProductoXml += `
+          if (hayFiltro === false || 
+              (hayFiltro && (name.includes(filtro.toLowerCase()) ||
+                             type.includes(filtro.toLowerCase())))) {
+            templateProductoXml += `
           <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
             <div class="card card-blog card-plain">
               <div class="card-header p-0 mt-n4 mx-3">
@@ -86,6 +87,7 @@ loadProducts = () => {
               </div>
             </div>
           </div>`
+          }
         };
 
         document.getElementById("productos").innerHTML += templateProductoXml;
@@ -103,12 +105,10 @@ loadProducts();
 let btnFilter = document.getElementById("filter");
 
 btnFilter.addEventListener('click', (event) => {
-  let hayFiltro = new Boolean(document.getElementById("text").innerHTML);
+  let hayFiltro = Boolean(document.getElementById("text").value);
 
-    if (hayFiltro === true) {
-      loadProducts();
-    }
-    else {
-      window.alert("No ha ingresado filtro");
-    }
+  if (hayFiltro === false) {
+    window.alert("No ha ingresado filtro");
+  }
+  loadProducts();
 });
