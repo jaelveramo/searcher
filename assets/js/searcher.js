@@ -1,8 +1,8 @@
 //var DOMParser = require('dom-parser');
 
 loadProducts = () => {
-    let URLJson = "https://raw.githubusercontent.com/Bootcamp-Espol/FSD02/main/S03D03/clase/recursos/products.json"
-    let URLXml = "https://raw.githubusercontent.com/Bootcamp-Espol/FSD02/main/S03D03/clase/recursos/products.xml"
+    let URLJson = "https://raw.githubusercontent.com/Bootcamp-Espol/Datos/main/products.json"
+    let URLXml = "https://raw.githubusercontent.com/Bootcamp-Espol/Datos/main/products.xml"
     let templateProductoJson = "";
     let templateProductoXml = "";
     let filtro = document.getElementById("text").value;
