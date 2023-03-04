@@ -57,16 +57,17 @@ loadProducts = () => {
         let xml = (new DOMParser()).parseFromString(resultXml, 'application/xml');
         let arrProducto = xml.getElementsByTagName("product");
 
+        if (hayFiltro) {
+          arrProducto = Array.from(arrProducto).filter((el) => (el.getElementsByTagName("name")[0].innerHTML.includes(filtro.toLowerCase()) || el.getElementsByTagName("type")[0].innerHTML.includes(filtro.toLowerCase())));
+        }
+
         for (let elemento of arrProducto) {
           let name = elemento.getElementsByTagName("name")[0].innerHTML;
           let price = elemento.getElementsByTagName("price")[0].innerHTML;
           let src = elemento.getElementsByTagName("src")[0].innerHTML;
           let type = elemento.getElementsByTagName("type")[0].innerHTML;
 
-          if (hayFiltro === false || 
-              (hayFiltro && (name.includes(filtro.toLowerCase()) ||
-                             type.includes(filtro.toLowerCase())))) {
-            templateProductoXml += `
+          templateProductoXml += `
           <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
             <div class="card card-blog card-plain">
               <div class="card-header p-0 mt-n4 mx-3">
@@ -87,7 +88,6 @@ loadProducts = () => {
               </div>
             </div>
           </div>`
-          }
         };
 
         document.getElementById("productos").innerHTML += templateProductoXml;
